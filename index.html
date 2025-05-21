@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Sign Language Translation Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Government Color Scheme */
+        :root {
+            --primary: #179ac5f1; /* Government blue */
+            --secondary: #1a4480; /* Darker blue */
+            --accent: #d83933; /* Red for alerts/important */
+            --dark: #1b1b1b; /* Dark text */
+            --light: #ffffff; /* White background */
+            --light-gray: #f0f0f0; /* Light gray */
+            --medium-gray: #dfe1e2; /* Medium gray */
+            --dark-gray: #5c5c5c; /* Dark gray */
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Public Sans', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--dark-gray);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            text-align: center;
+        }
+                /* Hero Section */
+                .hero {
+            background: linear-gradient(135deg, rgba(0, 94, 162, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .hero-text {
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .hero-image {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: all 0.5s ease;
+            height: 400px;
+        }
+
+        .hero-image:hover {
+            transform: perspective(1000px) rotateY(0deg);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 94, 162, 0.3) 0%, rgba(0, 94, 162, 0.1) 100%);
+        }
+
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-text {
+                text-align: center;
+                margin: 0 auto;
+            }
+            
+            .hero-image {
+                max-width: 500px;
+                margin: 0 auto;
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding: 80px 0;
+            }
+            
+            .hero-image {
+                height: 250px;
+            }
+        }
+
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Government Header */
+        header {
+            background-color: var(--light);
+            border-bottom: 1px solid var(--medium-gray);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo-subtext {
+            font-size: 0.875rem;
+            color: var(--dark-gray);
+            display: block;
+            font-weight: 400;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 1rem;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(0, 94, 162, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Translation Section */
+        .translation-section {
+            background-color: var(--light);
+            padding: 60px 0;
+        }
+
+        .translation-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #webcam-container {
+            position: relative;
+            margin: 20px 0;
+            border: 2px solid var(--medium-gray);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+        }
+
+        #toggle-btn {
+            padding: 12px 24px;
+            font-size: 1rem;
+            background-color: var(--primary);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            width: 200px;
+        }
+
+        #toggle-btn:hover {
+            background-color: var(--secondary);
+        }
+
+        #pose-box {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 180px;
+            height: 60px;
+            border: 3px solid var(--accent);
+            border-radius: 4px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        #label-container {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark);
+            padding: 15px 25px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .translation-info {
+            max-width: 800px;
+            margin: 40px auto 0;
+            text-align: center;
+        }
+
+        /* Features Section */
+        .features {
+            background-color: var(--light-gray);
+            padding: 60px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .footer-links h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--dark-gray);
+            text-align: center;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.75rem;
+            }
+            
+            nav ul {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background-color: white;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 40px;
+                transition: left 0.3s ease;
+                border-top: 1px solid var(--medium-gray);
+            }
+            
+            nav ul.active {
+                left: 0;
+            }
+            
+            nav ul li {
+                margin: 15px 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .header-container {
+                padding: 0 15px;
+            }
+
+            .hero {
+                padding: 60px 0;
+            }
+
+            section {
+                padding: 40px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Government Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <img src="https://www.svgrepo.com/show/352709/american-sign-language-interpreting.svg" alt="Government Logo">
+                <div class="logo-text">
+                    Sign Language Translation
+                    <span class="logo-subtext">A community for Deaf and Mute</span>
+                </div>
+            </a>
+            <nav>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <!-- <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#translation">Translation</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul> -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-grid">
+                        <div class="hero-text">
+                            <h1>Sign Language Translation Portal</h1>
+                            <p>An initiative to bridge communication gaps using AI-powered sign language recognition technology. Our system provides real-time translation to promote inclusivity and accessibility.</p>
+                            <a href="#translation" class="btn">Try Translation Tool</a>
+                        </div>
+                        <div class="hero-image">
+                            <img src="sign.png">
+                            <div class="image-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- Translation Section -->
+    <section class="translation-section" id="translation">
+        <div class="container">
+            <div class="section-header">
+                <h2>Sign Language Translation</h2>
+                <p>Use your webcam to translate sign language in real-time</p>
+            </div>
+            <div class="translation-container">
+                <button type="button" id="toggle-btn">Start Camera</button>
+                <div id="webcam-container">
+                    <div id="pose-box">Sign</div>
+                </div>
+                <div id="label-container">Camera not active</div>
+                <div id="sentence-box" style="margin-top: 15px; font-size: 20px; font-weight: 600;"></div>
+
+                <div class="translation-info">
+                    <h3>How to use the translator</h3>
+                    <p>1. Click "Start Camera" and allow access to your webcam<br>
+                    2. Position your hands within the marked area<br>
+                    3. The system will detect and translate your signs in real-time</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Key Features</h2>
+                <p>Our advanced sign language translation system offers</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Real-time Translation</h3>
+                    <p>Instant translation of sign language with minimal latency for natural conversations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Recognition</h3>
+                    <p>Advanced machine learning models trained on thousands of sign language samples.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-universal-access"></i>
+                    </div>
+                    <h3>Accessibility Focused</h3>
+                    <p>Designed specifically to improve accessibility for the hearing-impaired community.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>About This Initiative</h2>
+            </div>
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <p>This sign language translation portal is to create an inclusive society where communication barriers are eliminated through technology.</p>
+                <p>Developed in collaboration with leading AI researchers and the deaf community, this tool represents our commitment to accessibility and technological innovation for public good.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-links">
+                    <a href="#" class="footer-logo">Sign Language Translation</a>
+                    <p>An initiative by the Government of India to promote inclusive communication through technology.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#translation">Translation Tool</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> prince@gmail.com</li>
+                        <li><i class="fas fa-phone"></i> +91 1800 123 4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> coimbatore,TamilNadu</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Government of India. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- TensorFlow.js and Teachable Machine -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('nav ul');
+        
+        menuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            menuBtn.innerHTML = navMenu.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if(this.getAttribute('href') === '#') return;
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if(navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                        menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                }
+            });
+        });
+
+        // Sign Language Translation Functionality
+        const URL = "./my_model/"; // path to your exported Teachable Machine model
+
+        let model, webcam, labelContainer, maxPredictions;
+        let isCameraRunning = false;
+        let animationFrameId;
+        const poseBox = document.getElementById("pose-box");
+
+        const colors = ["#e91e63", "#9c27b0", "#3f51b5", "#4caf50", "#ff9800", "#f44336"];
+
+        document.getElementById("toggle-btn").addEventListener("click", toggleCamera);
+        document.getElementById("webcam-container").addEventListener("click", toggleCamera);
+
+        async function toggleCamera() {
+            if (!isCameraRunning) {
+                await init();
+                document.getElementById("toggle-btn").innerText = "Stop Camera";
+                document.getElementById("toggle-btn").style.backgroundColor = "#d83933"; // Red when active
+            } else {
+                stopCamera();
+                document.getElementById("toggle-btn").innerText = "Start Camera";
+                document.getElementById("toggle-btn").style.backgroundColor = "#005ea2"; // Blue when inactive
+            }
+            isCameraRunning = !isCameraRunning;
+        }
+
+        async function init() {
+            try {
+                const modelURL = URL + "model.json";
+                const metadataURL = URL + "metadata.json";
+
+                // Show loading state
+                document.getElementById("label-container").innerHTML = "Loading model...";
+                
+                model = await tmImage.load(modelURL, metadataURL);
+                maxPredictions = model.getTotalClasses();
+
+                const flip = true;
+                webcam = new tmImage.Webcam(600, 500, flip); // Adjusted size
+                await webcam.setup();
+                await webcam.play();
+                animationFrameId = window.requestAnimationFrame(loop);
+
+                const container = document.getElementById("webcam-container");
+                container.innerHTML = ""; // clear old content
+                container.appendChild(webcam.canvas);
+                container.appendChild(poseBox); // add pose box after canvas
+
+                labelContainer = document.getElementById("label-container");
+                labelContainer.innerHTML = "Ready for translation";
+            } catch (error) {
+                console.error("Error initializing:", error);
+                document.getElementById("label-container").innerHTML = "Error initializing camera. Please try again.";
+            }
+        }
+
+        function stopCamera() {
+            if (webcam && webcam.stop) {
+                webcam.stop();
+            }
+            if (animationFrameId) {
+                window.cancelAnimationFrame(animationFrameId);
+            }
+
+            const container = document.getElementById("webcam-container");
+            container.innerHTML = ""; // remove canvas
+            poseBox.style.display = "none";
+            labelContainer.innerHTML = "Camera stopped";
+        }
+
+        async function loop() {
+            webcam.update();
+            await predict();
+            animationFrameId = window.requestAnimationFrame(loop);
+        }
+
+        let sentence = [];
+let lastAppendedWord = "";
+
+async function predict() {
+    try {
+        const prediction = await model.predict(webcam.canvas);
+        let highestProb = 0;
+        let topPrediction = "";
+        let topWord = "";  // The raw word without percentage
+
+        prediction.forEach(p => {
+            if (p.probability > highestProb) {
+                highestProb = p.probability;
+                topWord = p.className;
+                topPrediction = `${topWord} (${(p.probability * 100).toFixed(1)}%)`;
+            }
+        });
+
+        // update UI with prediction
+        labelContainer.innerHTML = `<strong>${topPrediction}</strong>`;
+        poseBox.style.display = "flex";
+        poseBox.innerHTML = topWord; // just the word
+        poseBox.style.borderColor = colors[Math.floor(Math.random() * colors.length)];
+
+        // Append word to sentence if new and confidence above 85%
+        if (topWord !== lastAppendedWord && highestProb > 0.85) {
+            sentence.push(topWord);
+            lastAppendedWord = topWord;
+
+            // Update sentence box (make sure you have <div id="sentence-box"></div> in HTML)
+            const sentenceBox = document.getElementById("sentence-box");
+            sentenceBox.innerHTML = `<strong>Sentence: </strong>${sentence.map(word => `<span style="color:${colors[Math.floor(Math.random() * colors.length)]}; margin-right:6px;">${word}</span>`).join(' ')}`;
+        }
+
+    } catch (error) {
+        console.error("Prediction error:", error);
+    }
+}
+    </script>
+</body>
+</html>
